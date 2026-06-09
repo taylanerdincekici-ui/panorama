@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PANORAMA – Tarih, Bilim, Edebiyat & Gizem</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ivory:       #FAF7F2;
+    --parchment:   #F3EDE3;
+    --card-bg:     #FDFAF5;
+    --card-border: #E8DFD0;
+    --midnight:    #1A2744;
+    --burgundy:    #6B2D3E;
+    --charcoal:    #2D2D2D;
+    --smoke:       #5A5A5A;
+    --muted:       #8A8480;
+    --accent-gold: #C9A84C;
+    --accent-teal: #2A6A7C;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ivory);
+    color: var(--charcoal);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,247,242,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    padding: 0 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900; font-size: 1.6rem;
+    letter-spacing: 0.18em;
+    color: var(--midnight);
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-icon {
+    width: 34px; height: 34px;
+    background: var(--midnight);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-icon svg { width: 18px; height: 18px; fill: var(--accent-gold); }
+
+  .nav-links {
+    list-style: none;
+    display: flex; gap: 2rem; align-items: center;
+  }
+  .nav-links a {
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--smoke); text-decoration: none;
+    position: relative; padding-bottom: 4px;
+    transition: color .25s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--accent-gold);
+    transition: width .3s ease;
+  }
+  .nav-links a:hover { color: var(--midnight); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ivory) !important;
+    background: var(--midnight);
+    border-radius: 4px;
+    padding: 8px 18px !important;
+    transition: background .25s, transform .2s !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .nav-cta:hover { background: var(--burgundy) !important; transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 90vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 80px 5vw 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-text {
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(6rem, 18vw, 16rem);
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(26,39,68,0.055);
+    letter-spacing: 0.12em;
+    user-select: none; pointer-events: none;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+  .hero-tag {
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent-gold);
+    border: 1px solid var(--accent-gold);
+    border-radius: 20px;
+    padding: 5px 16px;
+    margin-bottom: 28px;
+    display: inline-block;
+    opacity: 0; transform: translateY(20px);
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5.5vw, 5.2rem);
+    font-weight: 700;
+    line-height: 1.18;
+    color: var(--midnight);
+    max-width: 800px;
+    margin-bottom: 24px;
+    opacity: 0; transform: translateY(30px);
+  }
+  .hero h1 em { font-style: italic; color: var(--burgundy); }
+  .hero p {
+    font-size: 1.05rem; color: var(--smoke);
+    max-width: 560px; line-height: 1.8;
+    margin-bottom: 40px;
+    opacity: 0; transform: translateY(20px);
+  }
+  .hero-btns {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    opacity: 0; transform: translateY(20px);
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--midnight); color: var(--ivory);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 14px 30px; border-radius: 5px;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background .25s, transform .2s, box-shadow .25s;
+    box-shadow: 0 4px 18px rgba(26,39,68,0.12);
+  }
+  .btn-primary:hover {
+    background: var(--burgundy);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(107,45,62,0.2);
+  }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--midnight);
+    font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 13px 28px; border-radius: 5px;
+    text-decoration: none; border: 1.5px solid var(--midnight); cursor: pointer;
+    transition: background .25s, color .25s, transform .2s;
+  }
+  .btn-secondary:hover {
+    background: var(--midnight); color: var(--ivory);
+    transform: translateY(-2px);
+  }
+  .hero-divider {
+    margin-top: 70px;
+    display: flex; align-items: center; gap: 16px;
+    opacity: 0.45;
+  }
+  .hero-divider span { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .hero-divider::before, .hero-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--card-border);
+  }
+
+  /* ─── SECTION HEADERS ─── */
+  .section-header {
+    text-align: center;
+    margin-bottom: 52px;
+  }
+  .section-label {
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent-gold); margin-bottom: 12px;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.9rem);
+    font-weight: 700; color: var(--midnight);
+    line-height: 1.25;
+  }
+  .section-header p {
+    margin-top: 14px;
+    font-size: 0.95rem; color: var(--smoke);
+    max-width: 520px; margin-left: auto; margin-right: auto;
+  }
+
+  /* ─── CATEGORIES BAR ─── */
+  .categories-bar {
+    padding: 28px 5vw;
+    border-top: 1px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
+    background: var(--parchment);
+  }
+  .cat-scroll {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  .cat-pill {
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--smoke);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 30px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: all .25s;
+    text-decoration: none;
+  }
+  .cat-pill:hover, .cat-pill.active {
+    background: var(--midnight); color: var(--ivory);
+    border-color: var(--midnight);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(26,39,68,0.13);
+  }
+
+  /* ─── FEATURED ─── */
+  .featured-section {
+    padding: 80px 5vw 40px;
+  }
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 28px;
+  }
+  @media(max-width:900px){ .featured-grid { grid-template-columns: 1fr; } }
+
+  /* ─── CARD BASE ─── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform .3s ease, box-shadow .3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex; flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 48px rgba(26,39,68,0.1);
+  }
+  .card-img {
+    width: 100%; object-fit: cover;
+    background: var(--parchment);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-img svg { opacity: 0.18; }
+  .card-img .cat-badge {
+    position: absolute; top: 14px; left: 14px;
+    font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 3px;
+  }
+  .card-body { padding: 24px 26px 26px; flex: 1; display: flex; flex-direction: column; }
+  .card-meta {
+    font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-meta span { color: var(--card-border); }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700; color: var(--midnight);
+    line-height: 1.3; margin-bottom: 10px;
+    transition: color .2s;
+  }
+  .card:hover .card-title { color: var(--burgundy); }
+  .card-excerpt {
+    font-size: 0.88rem; color: var(--smoke);
+    line-height: 1.72; flex: 1; margin-bottom: 18px;
+  }
+  .card-readmore {
+    font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--midnight);
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: gap .2s, color .2s;
+  }
+  .card:hover .card-readmore { gap: 10px; color: var(--burgundy); }
+
+  /* Featured main card */
+  .card-featured .card-img { height: 340px; }
+  .card-featured .card-title { font-size: 1.45rem; }
+  .card-featured .card-excerpt { font-size: 0.93rem; }
+
+  /* Side cards */
+  .featured-side { display: flex; flex-direction: column; gap: 28px; }
+  .card-side { flex-direction: row !important; }
+  .card-side .card-img { width: 130px; min-width: 130px; height: auto; flex-direction: column; }
+  .card-side .card-body { padding: 18px 20px; }
+  .card-side .card-title { font-size: 1rem; }
+  .card-side .card-excerpt { font-size: 0.83rem; -webkit-line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+  @media(max-width:600px){ .card-side { flex-direction: column !important; } .card-side .card-img { width: 100%; height: 140px; } }
+
+  /* ─── GRID SECTION ─── */
+  .grid-section {
+    padding: 70px 5vw;
+    background: var(--parchment);
+    border-top: 1px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 26px;
+  }
+  .card-grid .card-img { height: 188px; }
+  .card-grid .card-title { font-size: 1.08rem; }
+
+  /* ─── BADGE COLORS ─── */
+  .badge-history    { background: rgba(26,39,68,0.9); color: #E8D9B5; }
+  .badge-science    { background: rgba(42,106,124,0.9); color: #C8EAF0; }
+  .badge-literature { background: rgba(107,45,62,0.9); color: #F0D0D8; }
+  .badge-mystery    { background: rgba(55,35,75,0.9); color: #DDD0F0; }
+  .badge-biography  { background: rgba(100,70,20,0.9); color: #F0E0C0; }
+
+  /* ─── INLINE ILLUSTRATION ICONS (SVG placeholder visuals) ─── */
+  .illus-history { background: linear-gradient(145deg, #DDD0B8 0%, #C8B898 100%); }
+  .illus-science { background: linear-gradient(145deg, #C8DDE8 0%, #A8C8D8 100%); }
+  .illus-literature { background: linear-gradient(145deg, #E8C8D0 0%, #D0A8B8 100%); }
+  .illus-mystery { background: linear-gradient(145deg, #D0C8E0 0%, #B8A8D0 100%); }
+  .illus-biography { background: linear-gradient(145deg, #E0D4C0 0%, #C8B890 100%); }
+
+  /* ─── QUOTE STRIP ─── */
+  .quote-strip {
+    padding: 64px 5vw;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .quote-strip blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 2.8vw, 1.95rem);
+    font-style: italic;
+    color: var(--midnight);
+    max-width: 750px; margin: 0 auto;
+    line-height: 1.55;
+  }
+  .quote-strip cite {
+    display: block; margin-top: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem; font-style: normal;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 9rem; line-height: 0.5;
+    color: var(--accent-gold); opacity: 0.2;
+    position: absolute; top: 40px; left: 8vw;
+    user-select: none; pointer-events: none;
+  }
+
+  /* ─── NEWSLETTER ─── */
+  .newsletter {
+    background: var(--midnight);
+    padding: 80px 5vw;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .newsletter::before {
+    content: 'PANORAMA';
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 18vw; font-weight: 900;
+    color: rgba(255,255,255,0.025);
+    letter-spacing: 0.1em;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; user-select: none;
+    white-space: nowrap;
+  }
+  .newsletter .section-label { color: var(--accent-gold); }
+  .newsletter h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.7rem, 3.5vw, 2.8rem);
+    font-weight: 700; color: #F5F0E8;
+    line-height: 1.25; margin-bottom: 14px;
+  }
+  .newsletter p { color: rgba(245,240,232,0.65); font-size: 0.95rem; margin-bottom: 36px; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .nl-form {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+    max-width: 500px; margin: 0 auto;
+  }
+  .nl-input {
+    flex: 1; min-width: 220px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 5px;
+    padding: 14px 18px;
+    font-family: 'Inter', sans-serif; font-size: 0.9rem;
+    color: #F5F0E8;
+    outline: none;
+    transition: border-color .25s, background .25s;
+  }
+  .nl-input::placeholder { color: rgba(245,240,232,0.4); }
+  .nl-input:focus { border-color: var(--accent-gold); background: rgba(255,255,255,0.13); }
+  .nl-btn {
+    background: var(--accent-gold); color: var(--midnight);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 14px 26px; border-radius: 5px; border: none; cursor: pointer;
+    transition: background .25s, transform .2s, box-shadow .25s;
+    white-space: nowrap;
+  }
+  .nl-btn:hover {
+    background: #E0BB60;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,168,76,0.35);
+  }
+  .nl-note { font-size: 0.72rem; color: rgba(245,240,232,0.35); margin-top: 14px; letter-spacing: 0.04em; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #111928;
+    padding: 56px 5vw 30px;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 44px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  @media(max-width:850px){ .footer-top { grid-template-columns: 1fr 1fr; } }
+  @media(max-width:550px){ .footer-top { grid-template-columns: 1fr; } }
+
+  .footer-brand .logo { color: #F5F0E8; margin-bottom: 14px; display: inline-flex; }
+  .footer-brand p { font-size: 0.83rem; color: rgba(245,240,232,0.45); line-height: 1.7; }
+  .footer-social { display: flex; gap: 10px; margin-top: 18px; }
+  .social-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(245,240,232,0.55);
+    text-decoration: none; font-size: 0.8rem;
+    transition: background .25s, border-color .25s, color .25s, transform .2s;
+  }
+  .social-btn:hover {
+    background: var(--accent-gold); border-color: var(--accent-gold);
+    color: var(--midnight); transform: translateY(-2px);
+  }
+
+  .footer-col h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem; font-weight: 700;
+    color: #F5F0E8; margin-bottom: 16px;
+    letter-spacing: 0.04em;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul li a {
+    font-size: 0.82rem; color: rgba(245,240,232,0.5);
+    text-decoration: none;
+    transition: color .2s, padding-left .2s;
+    display: inline-block;
+  }
+  .footer-col ul li a:hover { color: var(--accent-gold); padding-left: 4px; }
+
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 24px; flex-wrap: wrap; gap: 10px;
+  }
+  .footer-bottom p { font-size: 0.75rem; color: rgba(245,240,232,0.3); }
+  .footer-bottom a { color: var(--accent-gold); text-decoration: none; }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── READING LINE ─── */
+  .reading-line {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent-gold), var(--burgundy));
+    width: 0%; z-index: 9999;
+    transition: width .1s linear;
+  }
+</style>
+</head>
+<body>
+
+<div class="reading-line" id="readLine"></div>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V8h2v9zm4 0h-2V8h2v9z"/>
+      </svg>
+    </div>
+    PANORAMA
+  </a>
+  <ul class="nav-links">
+    <li><a href="#tarih">Tarih</a></li>
+    <li><a href="#bilim">Bilim</a></li>
+    <li><a href="#edebiyat">Edebiyat & Müzik</a></li>
+    <li><a href="#gizem">Gizemli Olaylar</a></li>
+    <li><a href="#biyografi">Biyografiler</a></li>
+    <li><a href="#bulten" class="nav-cta">Abone Ol</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-bg-text">PANORAMA</div>
+
+  <div class="hero-tag" id="heroTag">Tarih · Bilim · Edebiyat · Gizem</div>
+
+  <h1 id="heroH1">
+    Geçmişin İzlerinde,<br/>
+    <em>Evrenin Sırlarında</em> Bir Yolculuk
+  </h1>
+
+  <p id="heroP">
+    Osmanlı'dan günümüze tarihin derin izleri, evrenin sonsuz sırları, edebiyatın büyülü dünyası ve çözüme kavuşamamış gizemler. PANORAMA, meraklı zihinler için yazıyor.
+  </p>
+
+  <div class="hero-btns" id="heroBtns">
+    <a href="#icerik" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      Yazıları Keşfet
+    </a>
+    <a href="#bulten" class="btn-secondary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Bülten'e Kayıt Ol
+    </a>
+  </div>
+
+  <div class="hero-divider">
+    <span>Taylan Erdinç · Editör</span>
+  </div>
+</section>
+
+<!-- ═══════════════ CATEGORIES BAR ═══════════════ -->
+<div class="categories-bar">
+  <div class="cat-scroll">
+    <a href="#tarih" class="cat-pill active">🏛 Tarih</a>
+    <a href="#bilim" class="cat-pill">🔭 Bilim & Teknoloji</a>
+    <a href="#edebiyat" class="cat-pill">📖 Edebiyat & Müzik</a>
+    <a href="#gizem" class="cat-pill">🔮 Gizemli Olaylar</a>
+    <a href="#biyografi" class="cat-pill">⚔️ Askeri Biyografiler</a>
+    <a href="#" class="cat-pill">🌍 Dünya Tarihi</a>
+    <a href="#" class="cat-pill">🧬 Bilim Tarihi</a>
+  </div>
+</div>
+
+<!-- ═══════════════ FEATURED ═══════════════ -->
+<section class="featured-section" id="icerik">
+  <div class="section-header reveal">
+    <div class="section-label">Editörün Seçimi</div>
+    <h2>Öne Çıkan Yazılar</h2>
+    <p>PANORAMA'nın en çok okunan ve tartışılan içeriklerinden seçkiler.</p>
+  </div>
+
+  <div class="featured-grid reveal">
+
+    <!-- BIG CARD -->
+    <a class="card card-featured" href="#" id="tarih">
+      <div class="card-img illus-mystery" style="height:340px; position:relative;">
+        <div class="cat-badge badge-mystery">Gizemli Olaylar</div>
+        <!-- Illustration SVG -->
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="42" stroke="#37234B" stroke-width="2" stroke-dasharray="6 4"/>
+          <circle cx="60" cy="60" r="26" stroke="#37234B" stroke-width="2"/>
+          <line x1="60" y1="18" x2="60" y2="102" stroke="#37234B" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <line x1="18" y1="60" x2="102" y2="60" stroke="#37234B" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <circle cx="60" cy="60" r="5" fill="#37234B" opacity="0.5"/>
+          <text x="60" y="16" text-anchor="middle" font-size="9" fill="#37234B" opacity="0.5" font-family="serif">N</text>
+          <text x="60" y="110" text-anchor="middle" font-size="9" fill="#37234B" opacity="0.5" font-family="serif">S</text>
+          <text x="106" y="63" text-anchor="middle" font-size="9" fill="#37234B" opacity="0.5" font-family="serif">E</text>
+          <text x="14" y="63" text-anchor="middle" font-size="9" fill="#37234B" opacity="0.5" font-family="serif">W</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">16 Ekim 2024 <span>·</span> 12 dk okuma</div>
+        <div class="card-title">Ural Dağları'nın Gizemi: Dyatlov Geçidi Vakası</div>
+        <p class="card-excerpt">1959 kışında dokuz deneyimli dağcı, Ural Dağları'nda çadırlarını yarıp kaçtı ve gizemli koşullar altında hayatını kaybetti. Soğuk Savaş'ın en karanlık dosyalarından biri olan bu vaka, onlarca yıl sonra hâlâ yanıtsız soruları barındırıyor.</p>
+        <span class="card-readmore">Devamını Oku →</span>
+      </div>
+    </a>
+
+    <!-- SIDE CARDS -->
+    <div class="featured-side">
+
+      <a class="card card-side" href="#" id="biyografi">
+        <div class="card-img illus-biography" style="width:130px; min-width:130px; position:relative;">
+          <div class="cat-badge badge-biography" style="font-size:0.58rem; top:8px; left:8px;">Biyografi</div>
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+            <rect x="20" y="10" width="20" height="24" rx="2" stroke="#644614" stroke-width="1.5" fill="rgba(100,70,20,0.15)"/>
+            <line x1="10" y1="40" x2="50" y2="40" stroke="#644614" stroke-width="1.5"/>
+            <rect x="14" y="40" width="32" height="10" rx="2" fill="rgba(100,70,20,0.2)" stroke="#644614" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">10 Ekim 2024 <span>·</span> 18 dk</div>
+          <div class="card-title">Ulus İçin Bir Ömür: Mareşal Fevzi Çakmak</div>
+          <p class="card-excerpt">Türk ordusunun 28 yıl boyunca Genelkurmay Başkanlığı'nı yürüten, Kurtuluş Savaşı'nın mimarlarından Fevzi Çakmak'ın tam biyografisi.</p>
+          <span class="card-readmore">Oku →</span>
+        </div>
+      </a>
+
+      <a class="card card-side" href="#">
+        <div class="card-img illus-history" style="width:130px; min-width:130px; position:relative;">
+          <div class="cat-badge badge-history" style="font-size:0.58rem; top:8px; left:8px;">Tarih</div>
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+            <polygon points="30,8 54,44 6,44" stroke="#1A2744" stroke-width="1.5" fill="rgba(26,39,68,0.12)"/>
+            <line x1="30" y1="8" x2="30" y2="44" stroke="#1A2744" stroke-width="1" stroke-dasharray="3 2"/>
+            <circle cx="30" cy="44" r="3" fill="#1A2744" opacity="0.4"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">8 Ekim 2024 <span>·</span> 15 dk</div>
+          <div class="card-title">Alternatif Tarih: Kurtuluş Savaşı Kazanılmasaydı?</div>
+          <p class="card-excerpt">Tarihin dönüm noktasında farklı bir yol seçilseydi, bugün Anadolu nasıl bir coğrafi ve siyasi tabloya sahip olurdu?</p>
+          <span class="card-readmore">Oku →</span>
+        </div>
+      </a>
+
+      <a class="card card-side" href="#">
+        <div class="card-img illus-history" style="width:130px; min-width:130px; position:relative;">
+          <div class="cat-badge badge-history" style="font-size:0.58rem; top:8px; left:8px;">Dünya Tarihi</div>
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+            <circle cx="30" cy="30" r="18" stroke="#1A2744" stroke-width="1.5" fill="rgba(26,39,68,0.08)"/>
+            <ellipse cx="30" cy="30" rx="8" ry="18" stroke="#1A2744" stroke-width="1" fill="none"/>
+            <line x1="12" y1="30" x2="48" y2="30" stroke="#1A2744" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">6 Ekim 2024 <span>·</span> 14 dk</div>
+          <div class="card-title">Çarlık Rusya'nın Alacakaranlığında: Lenin ve Devrim</div>
+          <p class="card-excerpt">1917 Ekim Devrimi'nin anatomisi; bir imparatorluğun çöküşü ve modern tarihin seyrini değiştiren o kırılgan anlar.</p>
+          <span class="card-readmore">Oku →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ GRID – ALL CATEGORIES ═══════════════ -->
+<section class="grid-section">
+  <div class="section-header reveal">
+    <div class="section-label">Tüm Kategoriler</div>
+    <h2>Merak Ettiğiniz Her Şey</h2>
+    <p>Beş farklı kategoride derinlemesine, akademik titizlikte ve akıcı anlatımla yazılmış içerikler.</p>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- TARİH -->
+    <a class="card card-grid reveal" href="#" id="tarih-sec">
+      <div class="card-img illus-history" style="height:188px; position:relative;">
+        <div class="cat-badge badge-history">Tarih</div>
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none">
+          <rect x="15" y="55" width="60" height="20" rx="2" fill="rgba(26,39,68,0.15)" stroke="#1A2744" stroke-width="1.2"/>
+          <rect x="25" y="38" width="40" height="20" rx="2" fill="rgba(26,39,68,0.12)" stroke="#1A2744" stroke-width="1.2"/>
+          <rect x="32" y="22" width="26" height="18" rx="2" fill="rgba(26,39,68,0.1)" stroke="#1A2744" stroke-width="1.2"/>
+          <line x1="45" y1="15" x2="45" y2="22" stroke="#1A2744" stroke-width="1.5"/>
+          <polygon points="45,10 48,17 42,17" fill="#1A2744" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">Osmanlı Tarihi <span>·</span> 22 dk okuma</div>
+        <div class="card-title">Osmanlı'nın Son Yüzyılı: İmparatorluktan Cumhuriyete Uzanan Çalkantılı Miras</div>
+        <p class="card-excerpt">Tanzimat'tan Meşrutiyet'e, İttihat ve Terakki'den Kurtuluş Savaşı'na... Bir çağın kapanışı ve yeni bir ulusun doğuşunun perde arkası.</p>
+        <span class="card-readmore">Devamını Oku →</span>
+      </div>
+    </a>
+
+    <!-- BİLİM -->
+    <a class="card card-grid reveal" href="#" id="bilim">
+      <div class="card-img illus-science" style="height:188px; position:relative;">
+        <div class="cat-badge badge-science">Bilim & Uzay</div>
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none">
+          <circle cx="45" cy="45" r="14" fill="rgba(42,106,124,0.2)" stroke="#2A6A7C" stroke-width="1.5"/>
+          <ellipse cx="45" cy="45" rx="35" ry="12" stroke="#2A6A7C" stroke-width="1.2" fill="none"/>
+          <ellipse cx="45" cy="45" rx="35" ry="12" stroke="#2A6A7C" stroke-width="1.2" fill="none" transform="rotate(60 45 45)"/>
+          <ellipse cx="45" cy="45" rx="35" ry="12" stroke="#2A6A7C" stroke-width="1.2" fill="none" transform="rotate(-60 45 45)"/>
+          <circle cx="45" cy="45" r="4" fill="#2A6A7C" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">Uzay Bilimleri <span>·</span> 16 dk okuma</div>
+        <div class="card-title">Karanlık Madde: Evrenin Görünmez İskeleti ve Büyük Fizik Muamması</div>
+        <p class="card-excerpt">Evrenin yüzde yirmi yedisini oluşturduğu hesaplanan, ne ışık yayan ne de yansıtan bu esrarengiz maddenin peşinde bilim insanları ne kadar ilerledi?</p>
+        <span class="card-readmore">Devamını Oku →</span>
+      </div>
+    </a>
+
+    <!-- EDEBİYAT -->
+    <a class="card card-grid reveal" href="#" id="edebiyat">
+      <div class="card-img illus-literature" style="height:188px; position:relative;">
+        <div class="cat-badge badge-literature">Edebiyat & Müzik</div>
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none">
+          <rect x="20" y="18" width="50" height="56" rx="3" fill="rgba(107,45,62,0.12)" stroke="#6B2D3E" stroke-width="1.5"/>
+          <line x1="28" y1="34" x2="62" y2="34" stroke="#6B2D3E" stroke-width="1.2"/>
+          <line x1="28" y1="44" x2="62" y2="44" stroke="#6B2D3E" stroke-width="1.2"/>
+          <line x1="28" y1="54" x2="48" y2="54" stroke="#6B2D3E" stroke-width="1.2"/>
+          <line x1="24" y1="18" x2="24" y2="74" stroke="#6B2D3E" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">Türk Edebiyatı <span>·</span> 11 dk okuma</div>
+        <div class="card-title">Yahya Kemal'den Orhan Pamuk'a: Türk Romanının 100 Yıllık Büyülü Serüveni</div>
+        <p class="card-excerpt">Cumhuriyet edebiyatının kökleri, modernleşme çabaları ve Nobel ödüllü bir yazarın dünya sahnesindeki yolculuğu.</p>
+        <span class="card-readmore">Devamını Oku →</span>
+      </div>
+    </a>
+
+    <!-- GİZEM -->
+    <a class="card card-grid reveal" href="#" id="gizem">
+      <div class="card-img illus-mystery" style="height:188px; position:relative;">
+        <div class="cat-badge badge-mystery">Gizemli Olaylar</div>
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none">
+          <polygon points="45,14 52,35 74,35 56,48 63,69 45,56 27,69 34,48 16,35 38,35" fill="rgba(55,35,75,0.15)" stroke="#37234B" stroke-width="1.5"/>
+          <circle cx="45" cy="45" r="6" fill="rgba(55,35,75,0.3)" stroke="#37234B" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">Çözümsüz Vakalar <span>·</span> 14 dk okuma</div>
+        <div class="card-title">Bermuda Şeytan Üçgeni: Efsanenin Gerçeği ve Bilimin Yanıtları</div>
+        <p class="card-excerpt">Onlarca gemi ve uçağın hiçbir iz bırakmadan yok olduğu iddia edilen bu bölge hakkında bilimin söyledikleri efsaneden çok daha ilginç.</p>
+        <span class="card-readmore">Devamını Oku →</span>
+      </div>
+    </a>
+
+    <!-- BİYOGRAFİ -->
+    <a class="card card-grid reveal" href="#">
+      <div class="card-img illus-biography" style="height:188px; position:relative;">
+        <div class="cat-badge badge-biography">Askeri Biyografi</div>
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none">
+          <circle cx="45" cy="30" r="14" stroke="#644614" stroke-width="1.5" fill="rgba(100,70,20,0.12)"/>
+          <path d="M18 72 Q18 52 45 52 Q72 52 72 72" stroke="#644614" stroke-width="1.5" fill="rgba(100,70,20,0.08)"/>
+          <line x1="38" y1="18" x2="52" y2="18" stroke="#644614" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="45" y1="14" x2="45" y2="22" stroke="#644614" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">Dünya Tarihi <span>·</span> 20 dk okuma</div>
+        <div class="card-title">Napolyon Bonaparte: Bir Dehanın Yükselişi ve Waterloo'daki Alacakaranlık</div>
+        <p class="card-excerpt">Korsika'dan tüm Avrupa'nın fatihi olmaya uzanan olağanüstü bir hayat hikayesi; strateji dehasının nasıl kendini mahvettiğinin anatomisi.</p>
+        <span class="card-readmore">Devamını Oku →</span>
+      </div>
+    </a>
+
+    <!-- BİLİM TARİHİ -->
+    <a class="card card-grid reveal" href="#">
+      <div class="card-img illus-science" style="height:188px; position:relative;">
+        <div class="cat-badge badge-science">Bilim Tarihi</div>
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none">
+          <line x1="45" y1="18" x2="45" y2="72" stroke="#2A6A7C" stroke-width="1.5"/>
+          <line x1="18" y1="45" x2="72" y2="45" stroke="#2A6A7C" stroke-width="1.5"/>
+          <circle cx="45" cy="28" r="6" fill="rgba(42,106,124,0.2)" stroke="#2A6A7C" stroke-width="1.2"/>
+          <circle cx="62" cy="45" r="4" fill="rgba(42,106,124,0.15)" stroke="#2A6A7C" stroke-width="1.2"/>
+          <circle cx="45" cy="58" r="5" fill="rgba(42,106,124,0.25)" stroke="#2A6A7C" stroke-width="1.2"/>
+          <circle cx="28" cy="38" r="3.5" fill="rgba(42,106,124,0.15)" stroke="#2A6A7C" stroke-width="1"/>
+          <polyline points="45,28 62,45 45,58 28,38" stroke="#2A6A7C" stroke-width="1" stroke-dasharray="3 2" fill="none"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">Biyoloji & Evrim <span>·</span> 13 dk okuma</div>
+        <div class="card-title">Darwin'in Sessiz Devrimi: Doğal Seçilim ve Hayatın Değişen Anlamı</div>
+        <p class="card-excerpt">Beagle'ın güvertesinden Türlerin Kökeni'ne uzanan yolculuk; bir fikrin dünyayı nasıl değiştirdiğinin ve hâlâ nasıl yankılandığının hikayesi.</p>
+        <span class="card-readmore">Devamını Oku →</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════ QUOTE STRIP ═══════════════ -->
+<section class="quote-strip reveal">
+  <div class="quote-mark">"</div>
+  <blockquote>
+    "Tarihi bilmek, geleceği görmektir. Onu bilmeyenler, her zaman başka birinin yazdığı hikâyede figüran olarak kalır."
+  </blockquote>
+  <cite>— PANORAMA Editörü, Taylan Erdinç</cite>
+</section>
+
+<!-- ═══════════════ NEWSLETTER ═══════════════ -->
+<section class="newsletter" id="bulten">
+  <div class="section-label" style="margin-bottom:16px;">Haftalık Bülten</div>
+  <h2>Merak Edenler İçin<br/>Her Pazar Sabahı</h2>
+  <p>Haftanın en dikkat çekici tarih, bilim, edebiyat ve gizem yazıları, derleme notlar ve editörün özel önerileriyle doğrudan gelen kutunuza.</p>
+  <div class="nl-form">
+    <input type="email" class="nl-input" placeholder="E-posta adresiniz…"/>
+    <button class="nl-btn" onclick="this.textContent='✓ Kaydedildi!'; this.style.background='#5AAB6B';">Abone Ol</button>
+  </div>
+  <p class="nl-note">Spam yok. Dilediğiniz an abonelikten çıkabilirsiniz.</p>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9V8h2v9zm4 0h-2V8h2v9z"/>
+          </svg>
+        </div>
+        PANORAMA
+      </a>
+      <p>Tarih, bilim, edebiyat ve gizemli olayları derinlemesine araştıran, Türkçe içerik üreten bağımsız bir düşünce ve kültür platformu.</p>
+      <div class="footer-social">
+        <a href="https://twitter.com/pasteurant" target="_blank" class="social-btn" title="Twitter">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.731-8.835L2.18 2.25h7.418l4.248 5.618 5.397-5.618zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/taylanerdincekici/" target="_blank" class="social-btn" title="Instagram">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Kategoriler</h4>
+      <ul>
+        <li><a href="#tarih">Osmanlı Tarihi</a></li>
+        <li><a href="#tarih">Cumhuriyet Tarihi</a></li>
+        <li><a href="#tarih">Dünya Tarihi</a></li>
+        <li><a href="#bilim">Bilim & Uzay</a></li>
+        <li><a href="#bilim">Bilim Tarihi</a></li>
+        <li><a href="#edebiyat">Edebiyat & Müzik</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Keşfet</h4>
+      <ul>
+        <li><a href="#gizem">Gizemli Olaylar</a></li>
+        <li><a href="#biyografi">Askeri Biyografiler</a></li>
+        <li><a href="#biyografi">Siyasi Biyografiler</a></li>
+        <li><a href="#">Editörün Seçimi</a></li>
+        <li><a href="#">Uzun Okumalar</a></li>
+        <li><a href="#">Arşiv</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>PANORAMA</h4>
+      <ul>
+        <li><a href="#">Hakkında</a></li>
+        <li><a href="#">Editör: Taylan Erdinç</a></li>
+        <li><a href="#">İletişim</a></li>
+        <li><a href="#bulten">Bülten Aboneliği</a></li>
+        <li><a href="#">Gizlilik Politikası</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2024 PANORAMA · Tüm hakları saklıdır.</p>
+    <p>Tasarım ile sevgiyle hazırlandı · <a href="https://mypanoramam.blogspot.com/" target="_blank">mypanoramam.blogspot.com</a></p>
+  </div>
+</footer>
+
+<script>
+  // ─── HERO ENTRANCE ANIMATION ───
+  window.addEventListener('load', () => {
+    const tag = document.getElementById('heroTag');
+    const h1  = document.getElementById('heroH1');
+    const p   = document.getElementById('heroP');
+    const btns= document.getElementById('heroBtns');
+
+    setTimeout(() => { tag.style.cssText  += 'opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease'; }, 200);
+    setTimeout(() => { h1.style.cssText   += 'opacity:1;transform:translateY(0);transition:opacity .7s ease,transform .7s ease'; }, 450);
+    setTimeout(() => { p.style.cssText    += 'opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease'; }, 680);
+    setTimeout(() => { btns.style.cssText += 'opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease'; }, 850);
+  });
+
+  // ─── SCROLL REVEAL ───
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+
+  // ─── READING PROGRESS ───
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('readLine').style.width = (scrolled / total * 100) + '%';
+  });
+
+  // ─── CATEGORY PILLS ───
+  document.querySelectorAll('.cat-pill').forEach(pill => {
+    pill.addEventListener('click', function() {
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
